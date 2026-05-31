@@ -216,4 +216,37 @@ describe('adaptResponse()', () => {
     ]);
   });
 
+  it('sorts media items by quality descending and groups them by type (video -> audio -> image)', () => {
+    const raw = {
+      videos: [
+        { url: 'https://yt.com/360.mp4', quality: '360p', format: 'MP4' },
+        { url: 'https://yt.com/1080.mp4', quality: '1080p', format: 'MP4' },
+        { url: 'https://yt.com/720.mp4', quality: '720p', format: 'MP4' }
+      ],
+      audios: [
+        { url: 'https://yt.com/128.mp3', quality: '128kbps', format: 'MP3' },
+        { url: 'https://yt.com/320.mp3', quality: '320kbps', format: 'MP3' }
+      ],
+      images: [
+        { url: 'https://yt.com/thumb_low.jpg', quality: 'low', format: 'jpg' },
+        { url: 'https://yt.com/thumb_high.jpg', quality: 'high', format: 'jpg' }
+      ]
+    };
+    const result = adaptResponse(raw, 'youtube');
+
+    expect(result.success).toBe(true);
+    expect(result.media).toEqual([
+      // Videos sorted descending: 1080p -> 720p -> 360p
+      { type: 'video', url: 'https://yt.com/1080.mp4', quality: '1080p', format: 'mp4', sizeMB: null },
+      { type: 'video', url: 'https://yt.com/720.mp4', quality: '720p', format: 'mp4', sizeMB: null },
+      { type: 'video', url: 'https://yt.com/360.mp4', quality: '360p', format: 'mp4', sizeMB: null },
+      // Audios sorted descending: 320kbps -> 128kbps
+      { type: 'audio', url: 'https://yt.com/320.mp3', quality: '320kbps', format: 'mp3', sizeMB: null },
+      { type: 'audio', url: 'https://yt.com/128.mp3', quality: '128kbps', format: 'mp3', sizeMB: null },
+      // Images sorted descending: high (falls back to 1000 score) -> low (falls back to 100 score)
+      { type: 'image', url: 'https://yt.com/thumb_high.jpg', quality: 'high', format: 'jpg' },
+      { type: 'image', url: 'https://yt.com/thumb_low.jpg', quality: 'low', format: 'jpg' }
+    ]);
+  });
+
 });

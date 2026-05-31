@@ -173,6 +173,53 @@ export function adaptResponse(raw: any, platform: string): DownloadResult {
     }
   }
 
+  // Group by type
+  const videos = media.filter(item => item.type === 'video');
+  const audios = media.filter(item => item.type === 'audio');
+  const images = media.filter(item => item.type === 'image');
+
+  // Helper to parse quality score
+  function getQualityScore(item: AdaptedMediaItem): number {
+    const qualityStr = item.quality || '';
+    const resMatch = qualityStr.match(/(\d+)x(\d+)/i);
+    if (resMatch) {
+      return parseInt(resMatch[1]) * parseInt(resMatch[2]);
+    }
+    const numMatch = qualityStr.match(/(\d+)/);
+    if (numMatch) {
+      let score = parseInt(numMatch[1]);
+      if (qualityStr.toLowerCase().includes('4k')) score = Math.max(score, 2160);
+      if (qualityStr.toLowerCase().includes('2k')) score = Math.max(score, 1440);
+      return score;
+    }
+    if (item.sizeMB) {
+      return item.sizeMB * 10;
+    }
+    const lower = qualityStr.toLowerCase();
+    if (lower.includes('original') || lower.includes('best') || lower.includes('hd') || lower.includes('high') || lower.includes('max')) return 1000;
+    if (lower.includes('medium') || lower.includes('sd')) return 500;
+    if (lower.includes('low') || lower.includes('mobile')) return 100;
+    return 0;
+  }
+
+  // Sort each group descending
+  const sortByQuality = (a: AdaptedMediaItem, b: AdaptedMediaItem) => {
+    const scoreA = getQualityScore(a);
+    const scoreB = getQualityScore(b);
+    if (scoreA !== scoreB) {
+      return scoreB - scoreA;
+    }
+    const sizeA = a.sizeMB || 0;
+    const sizeB = b.sizeMB || 0;
+    return sizeB - sizeA;
+  };
+
+  videos.sort(sortByQuality);
+  audios.sort(sortByQuality);
+  images.sort(sortByQuality);
+
+  const sortedMedia = [...videos, ...audios, ...images];
+
   return {
     success: true,
     platform,
@@ -180,6 +227,6 @@ export function adaptResponse(raw: any, platform: string): DownloadResult {
     description: typeof description === 'string' ? description : null,
     thumbnail: typeof thumbnail === 'string' ? thumbnail : null,
     duration,
-    media,
+    media: sortedMedia,
   };
 }
