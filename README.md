@@ -35,6 +35,18 @@ npm install mediasnap
 
 ## Usage
 
+### Importing in Another Project
+
+#### ES Modules (TypeScript / Modern Node.js)
+```typescript
+import { downloadMedia, detectPlatform } from 'mediasnap';
+```
+
+#### CommonJS (Standard Node.js)
+```javascript
+const { downloadMedia, detectPlatform } = require('mediasnap');
+```
+
 ### Platform Detection
 Detect the downloader platform from a URL:
 
@@ -46,7 +58,7 @@ console.log(platform); // 'youtube'
 ```
 
 ### Media Downloading
-Download media directly using a smart, single entry point `downloadMedia(url)` that automatically matches the appropriate scraper service:
+Download media directly using the unified `downloadMedia(url)` entry point:
 
 ```typescript
 import { downloadMedia } from 'mediasnap';
@@ -63,6 +75,13 @@ async function run() {
 }
 
 run();
+```
+
+### Command Line Execution
+You can test the package directly from your shell using Node's evaluation flag:
+
+```bash
+node -e "const { downloadMedia } = require('mediasnap'); downloadMedia('https://www.youtube.com/watch?v=dQw4w9WgXcQ').then(console.log);"
 ```
 
 ---
