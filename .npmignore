@@ -1,0 +1,10 @@
+upstream/
+src/
+tests/
+scripts/
+tsconfig.json
+jest.config.ts
+mediasnap-spec.md
+.gitignore
+.DS_Store
+package-lock.json
