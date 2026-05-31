@@ -1,6 +1,6 @@
 {
   "name": "mediasnap",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "Single entry-point media downloader for TikTok, Instagram, YouTube, Reddit and more. Node.js / NestJS ready.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
