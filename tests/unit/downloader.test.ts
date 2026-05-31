@@ -8,24 +8,24 @@ jest.mock('../../src/detector', () => ({
 }));
 
 // Mock all 18 upstream services according to their specific exports
-jest.mock('../../upstream/services/blueskyService', () => ({ fetchBlueskyMedia: jest.fn() }));
-jest.mock('../../upstream/services/capcutService', () => ({ fetchCapcutData: jest.fn() }));
-jest.mock('../../upstream/services/dailymotionService', () => ({ fetchDailymotionData: jest.fn() }));
-jest.mock('../../upstream/services/douyinService', () => ({ fetchDouyinVideoInfo: jest.fn() }));
-jest.mock('../../upstream/services/facebookInstaService', () => jest.fn());
-jest.mock('../../upstream/services/kuaishouService', () => ({ scrapeKuaishou: jest.fn() }));
-jest.mock('../../upstream/services/linkedinService', () => ({ fetchLinkedinData: jest.fn() }));
-jest.mock('../../upstream/services/pinterestService', () => ({ fetchPinterestMedia: jest.fn() }));
-jest.mock('../../upstream/services/redditService', () => jest.fn());
-jest.mock('../../upstream/services/snapchatService', () => ({ fetchSnapchat: jest.fn() }));
-jest.mock('../../upstream/services/soundcloudService', () => ({ fetchSoundcloudData: jest.fn() }));
-jest.mock('../../upstream/services/spotifyService', () => ({ fetchSpotify: jest.fn() }));
-jest.mock('../../upstream/services/teraboxService', () => ({ fetchTerabox: jest.fn() }));
-jest.mock('../../upstream/services/threadsService', () => jest.fn());
-jest.mock('../../upstream/services/tiktokService', () => ({ fetchTikTokData: jest.fn() }));
-jest.mock('../../upstream/services/tumblrService', () => ({ fetchTumblrData: jest.fn() }));
-jest.mock('../../upstream/services/twitterService', () => ({ twitterDownloader: jest.fn() }));
-jest.mock('../../upstream/services/youtubeService', () => ({ fetchYouTubeData: jest.fn() }));
+jest.mock('../../lib/services/blueskyService', () => ({ fetchBlueskyMedia: jest.fn() }));
+jest.mock('../../lib/services/capcutService', () => ({ fetchCapcutData: jest.fn() }));
+jest.mock('../../lib/services/dailymotionService', () => ({ fetchDailymotionData: jest.fn() }));
+jest.mock('../../lib/services/douyinService', () => ({ fetchDouyinVideoInfo: jest.fn() }));
+jest.mock('../../lib/services/facebookInstaService', () => jest.fn());
+jest.mock('../../lib/services/kuaishouService', () => ({ scrapeKuaishou: jest.fn() }));
+jest.mock('../../lib/services/linkedinService', () => ({ fetchLinkedinData: jest.fn() }));
+jest.mock('../../lib/services/pinterestService', () => ({ fetchPinterestMedia: jest.fn() }));
+jest.mock('../../lib/services/redditService', () => jest.fn());
+jest.mock('../../lib/services/snapchatService', () => ({ fetchSnapchat: jest.fn() }));
+jest.mock('../../lib/services/soundcloudService', () => ({ fetchSoundcloudData: jest.fn() }));
+jest.mock('../../lib/services/spotifyService', () => ({ fetchSpotify: jest.fn() }));
+jest.mock('../../lib/services/teraboxService', () => ({ fetchTerabox: jest.fn() }));
+jest.mock('../../lib/services/threadsService', () => jest.fn());
+jest.mock('../../lib/services/tiktokService', () => ({ fetchTikTokData: jest.fn() }));
+jest.mock('../../lib/services/tumblrService', () => ({ fetchTumblrData: jest.fn() }));
+jest.mock('../../lib/services/twitterService', () => ({ twitterDownloader: jest.fn() }));
+jest.mock('../../lib/services/youtubeService', () => ({ fetchYouTubeData: jest.fn() }));
 
 const mockDetect = detectPlatform as jest.Mock;
 
@@ -64,7 +64,7 @@ describe('downloadMedia()', () => {
   test.each(platformMockDetails)('correctly routes and executes platform: %s', async ({ platform, modulePath, funcName, mockResult }) => {
     mockDetect.mockReturnValue(platform);
 
-    const fullModulePath = `../../upstream/services/${modulePath}`;
+    const fullModulePath = `../../lib/services/${modulePath}`;
     const moduleMock = require(fullModulePath);
 
     if (funcName) {
@@ -99,7 +99,7 @@ describe('downloadMedia()', () => {
 
   it('returns success:false when the service throws an error', async () => {
     mockDetect.mockReturnValue('tiktok');
-    const mockService = require('../../upstream/services/tiktokService').fetchTikTokData;
+    const mockService = require('../../lib/services/tiktokService').fetchTikTokData;
     mockService.mockRejectedValue(new Error('Network timeout'));
 
     const result = await downloadMedia('https://www.tiktok.com/@user/video/123');
@@ -111,7 +111,7 @@ describe('downloadMedia()', () => {
 
   it('handles non-Error objects thrown by the service', async () => {
     mockDetect.mockReturnValue('tiktok');
-    const mockService = require('../../upstream/services/tiktokService').fetchTikTokData;
+    const mockService = require('../../lib/services/tiktokService').fetchTikTokData;
     mockService.mockRejectedValue('String error');
 
     const result = await downloadMedia('https://www.tiktok.com/@user/video/123');

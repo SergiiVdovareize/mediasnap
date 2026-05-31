@@ -1,4 +1,10 @@
-upstream/
+lib/controllers/
+lib/routes/
+lib/index.js
+lib/package.json
+lib/vercel.json
+lib/README.md
+lib/.gitignore
 src/
 tests/
 scripts/
