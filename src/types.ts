@@ -1,8 +1,21 @@
+export interface AdaptedMediaItem {
+  type: 'video' | 'audio' | 'image';
+  url: string;
+  quality: string | null;
+  format: string | null;
+  sizeMB?: number | null;
+}
+
 export interface DownloadResult {
   success: boolean;
   platform: string;
-  data: Record<string, unknown>;  // mirrors upstream { success, data } shape
+  title: string | null;
+  description: string | null;
+  thumbnail: string | null;
+  duration: string | number | null;
+  media: AdaptedMediaItem[];
   error?: string;
+  raw: Record<string, any> | string;
 }
 
 export type SupportedPlatform =

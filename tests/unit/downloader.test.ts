@@ -78,7 +78,7 @@ describe('downloadMedia()', () => {
     expect(mockDetect).toHaveBeenCalledWith(`https://www.example.com/${platform}`);
     expect(result.success).toBe(true);
     expect(result.platform).toBe(platform);
-    expect(result.data).toEqual(mockResult);
+    expect(result.raw).toEqual(mockResult);
 
     if (funcName) {
       expect(moduleMock[funcName]).toHaveBeenCalledWith(`https://www.example.com/${platform}`);

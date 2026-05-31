@@ -1,5 +1,6 @@
 import { detectPlatform } from './detector';
 import { DownloadResult, SupportedPlatform } from './types';
+import { adaptResponse } from './adapter';
 
 type ServiceFn = (url: string) => Promise<any>;
 
@@ -29,19 +30,49 @@ export async function downloadMedia(url: string): Promise<DownloadResult> {
   const platform = detectPlatform(url);
 
   if (!platform) {
-    return { success: false, platform: 'unknown', data: {}, error: `Unsupported URL: ${url}` };
+    return {
+      success: false,
+      platform: 'unknown',
+      title: null,
+      description: null,
+      thumbnail: null,
+      duration: null,
+      media: [],
+      error: `Unsupported URL: ${url}`,
+      raw: {},
+    };
   }
 
   const serviceFn = serviceMap[platform];
   if (!serviceFn) {
-    return { success: false, platform, data: {}, error: `Service not implemented: ${platform}` };
+    return {
+      success: false,
+      platform,
+      title: null,
+      description: null,
+      thumbnail: null,
+      duration: null,
+      media: [],
+      error: `Service not implemented: ${platform}`,
+      raw: {},
+    };
   }
 
   try {
     const raw = await serviceFn(url);
-    return { success: true, platform, data: raw as Record<string, unknown> };
+    return adaptResponse(raw, platform);
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : String(err);
-    return { success: false, platform, data: {}, error: message };
+    return {
+      success: false,
+      platform,
+      title: null,
+      description: null,
+      thumbnail: null,
+      duration: null,
+      media: [],
+      error: message,
+      raw: {},
+    };
   }
 }
