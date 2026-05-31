@@ -18,7 +18,6 @@ export function adaptResponse(raw: any, platform: string): DownloadResult {
           format: 'mp4',
         },
       ],
-      raw,
     };
   }
 
@@ -182,6 +181,5 @@ export function adaptResponse(raw: any, platform: string): DownloadResult {
     thumbnail: typeof thumbnail === 'string' ? thumbnail : null,
     duration,
     media,
-    raw,
   };
 }

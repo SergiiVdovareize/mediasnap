@@ -17,7 +17,6 @@ describe('adaptResponse()', () => {
         format: 'mp4',
       }
     ]);
-    expect(result.raw).toBe(raw);
   });
 
   it('normalizes TikTok service output', () => {

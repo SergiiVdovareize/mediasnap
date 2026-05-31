@@ -15,7 +15,6 @@ export interface DownloadResult {
   duration: string | number | null;
   media: AdaptedMediaItem[];
   error?: string;
-  raw: Record<string, any> | string;
 }
 
 export type SupportedPlatform =

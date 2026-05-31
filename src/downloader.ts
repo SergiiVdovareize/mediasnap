@@ -39,7 +39,6 @@ export async function downloadMedia(url: string): Promise<DownloadResult> {
       duration: null,
       media: [],
       error: `Unsupported URL: ${url}`,
-      raw: {},
     };
   }
 
@@ -54,7 +53,6 @@ export async function downloadMedia(url: string): Promise<DownloadResult> {
       duration: null,
       media: [],
       error: `Service not implemented: ${platform}`,
-      raw: {},
     };
   }
 
@@ -72,7 +70,6 @@ export async function downloadMedia(url: string): Promise<DownloadResult> {
       duration: null,
       media: [],
       error: message,
-      raw: {},
     };
   }
 }
