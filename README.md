@@ -68,7 +68,8 @@ async function run() {
   
   if (result.success) {
     console.log('Platform:', result.platform);
-    console.log('Media data:', result.data);
+    console.log('Title:', result.title);
+    console.log('Media items:', result.media);
   } else {
     console.error('Error:', result.error);
   }
@@ -88,10 +89,22 @@ node -e "const { downloadMedia } = require('mediasnap'); downloadMedia('https://
 The `downloadMedia` function returns a `Promise<DownloadResult>` with the following shape:
 
 ```typescript
+interface AdaptedMediaItem {
+  type: 'video' | 'audio' | 'image';
+  url: string;                 // direct download URL
+  quality: string | null;      // label (e.g. '1080p', '128kbps', 'original')
+  format: string | null;       // normalized lowercase format (e.g. 'mp4', 'mp3', 'jpg')
+  sizeMB?: number | null;      // estimated file size in MB if available
+}
+
 interface DownloadResult {
   success: boolean;            // true if the download succeeded, false otherwise
   platform: string;            // the detected platform name (e.g., 'youtube', 'tiktok', etc.) or 'unknown'
-  data: Record<string, any>;   // platform-specific JSON data returned by the upstream service
+  title: string | null;        // post / media title
+  description: string | null;  // post description or caption
+  thumbnail: string | null;    // video thumbnail / image preview url
+  duration: string | number | null; // duration if available
+  media: AdaptedMediaItem[];   // list of extracted media items, sorted descending by quality
   error?: string;              // details of the error if success is false
 }
 ```
