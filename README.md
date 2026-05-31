@@ -84,6 +84,18 @@ You can test the package directly from your shell using Node's evaluation flag:
 node -e "const { downloadMedia } = require('mediasnap'); downloadMedia('https://www.youtube.com/watch?v=dQw4w9WgXcQ').then(console.log);"
 ```
 
+### Return Structure
+The `downloadMedia` function returns a `Promise<DownloadResult>` with the following shape:
+
+```typescript
+interface DownloadResult {
+  success: boolean;            // true if the download succeeded, false otherwise
+  platform: string;            // the detected platform name (e.g., 'youtube', 'tiktok', etc.) or 'unknown'
+  data: Record<string, any>;   // platform-specific JSON data returned by the upstream service
+  error?: string;              // details of the error if success is false
+}
+```
+
 ---
 
 ## NestJS Integration Example
