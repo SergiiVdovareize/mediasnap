@@ -15,6 +15,7 @@ describe('detectPlatform()', () => {
     ['https://www.reddit.com/r/memes/comments/abc/',     'reddit'],
     ['https://www.pinterest.com/pin/123/',               'pinterest'],
     ['https://www.threads.net/@user/post/123',           'threads'],
+    ['https://www.threads.com/@user/post/123',           'threads'],
     ['https://www.linkedin.com/posts/user-123',          'linkedin'],
     ['https://www.snapchat.com/spotlight/abc',           'snapchat'],
     ['https://soundcloud.com/artist/track',              'soundcloud'],

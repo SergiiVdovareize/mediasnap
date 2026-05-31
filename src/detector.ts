@@ -8,7 +8,7 @@ const PLATFORM_PATTERNS: Array<{ pattern: RegExp; platform: SupportedPlatform }>
   { pattern: /youtube\.com|youtu\.be/i,    platform: 'youtube' },
   { pattern: /reddit\.com/i,               platform: 'reddit' },
   { pattern: /pinterest\./i,              platform: 'pinterest' },
-  { pattern: /threads\.net/i,              platform: 'threads' },
+  { pattern: /threads\.(net|com)/i,              platform: 'threads' },
   { pattern: /linkedin\.com/i,             platform: 'linkedin' },
   { pattern: /snapchat\.com/i,             platform: 'snapchat' },
   { pattern: /soundcloud\.com/i,           platform: 'soundcloud' },
